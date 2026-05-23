@@ -1,0 +1,14 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Ppl\PplDeeplV3Requests\:
+    resource: '../Classes/*'
+
+  Ppl\PplDeeplV3Requests\Service\DeeplApiClientService:
+    public: true
+
+  Ppl\PplDeeplV3Requests\Service\DeeplConfigurationService:
+    public: true

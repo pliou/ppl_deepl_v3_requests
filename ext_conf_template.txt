@@ -1,0 +1,5 @@
+# cat=basic//; type=string; label=DeepL V3 Auth Key
+authKey =
+
+# cat=basic//; type=string; label=DeepL V3 API base URL
+apiBaseUrl = https://api.deepl.com
