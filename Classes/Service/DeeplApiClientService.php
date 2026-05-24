@@ -210,7 +210,9 @@ final class DeeplApiClientService
                 ]
             );
         } finally {
-            fclose($fileHandle);
+            if (is_resource($fileHandle)) {
+                fclose($fileHandle);
+            }
         }
 
         return $this->decodeJsonResponse($response);

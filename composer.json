@@ -1,6 +1,6 @@
 {
   "name": "ppl/ppl-deepl-v3-requests",
-  "description": "TYPO3 service package for DeepL V3 REST requests",
+  "description": "TYPO3 12.4 service package for DeepL V3 REST text, glossary, style rule and document requests",
   "type": "typo3-cms-extension",
   "license": "GPL-2.0-or-later",
   "authors": [
