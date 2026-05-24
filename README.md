@@ -31,7 +31,7 @@ This package is usually installed together with a consuming extension such as `p
 
 ## Configuration
 
-Set the DeepL auth key only in the local TYPO3 system configuration, for example in `config/system/settings.php` under `EXTENSIONS.ppl_deepl_v3_requests.authKey`. The public package does not ship an auth key field, TypoScript auth key constant or environment-variable fallback.
+Set the DeepL auth key in TYPO3 extension configuration (`ppl_deepl_v3_requests.authKey`) or directly in `config/system/settings.php` under `EXTENSIONS.ppl_deepl_v3_requests.authKey`. The public package only ships an empty configuration field; no key value, TypoScript auth key constant or environment-variable fallback is included.
 
 Set `apiBaseUrl` when the default endpoint is not correct for the DeepL account:
 
