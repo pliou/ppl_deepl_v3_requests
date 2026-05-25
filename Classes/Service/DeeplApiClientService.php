@@ -84,7 +84,7 @@ final class DeeplApiClientService
             $payload['tag_handling'] = $tagHandling;
         }
 
-        $response = $this->requestJson($authKey, 'POST', '/v2/translate', $payload);
+        $response = $this->requestClassicJson($authKey, 'POST', '/v2/translate', $payload);
         $translations = $response['translations'] ?? [];
         if (!is_array($translations)) {
             throw new \RuntimeException('DeepL did not return text translations.');
@@ -160,6 +160,17 @@ final class DeeplApiClientService
         return $this->requestJson($authKey, 'GET', '/v3/languages?' . $query);
     }
 
+    public function listTextTranslationLanguages(string $authKey, string $type): array
+    {
+        if (!in_array($type, ['source', 'target'], true)) {
+            throw new \InvalidArgumentException('Language type must be source or target.');
+        }
+
+        $query = http_build_query(['type' => $type], '', '&', PHP_QUERY_RFC3986);
+
+        return $this->requestClassicJson($authKey, 'GET', '/v2/languages?' . $query);
+    }
+
     private function uploadDocument(
         string $authKey,
         string $sourcePath,
@@ -201,7 +212,7 @@ final class DeeplApiClientService
 
         try {
             $response = $this->requestFactory->request(
-                $this->buildUrl('/v2/document'),
+                $this->buildClassicUrl('/v2/document', $authKey),
                 'POST',
                 [
                     'headers' => $this->buildHeaders($authKey, false),
@@ -220,7 +231,7 @@ final class DeeplApiClientService
 
     private function getDocumentStatus(string $authKey, string $documentId, string $documentKey): array
     {
-        return $this->requestJson($authKey, 'POST', '/v2/document/' . rawurlencode($documentId), [
+        return $this->requestClassicJson($authKey, 'POST', '/v2/document/' . rawurlencode($documentId), [
             'document_key' => $documentKey,
         ]);
     }
@@ -228,7 +239,7 @@ final class DeeplApiClientService
     private function downloadDocument(string $authKey, string $documentId, string $documentKey, string $targetPath): void
     {
         $response = $this->requestFactory->request(
-            $this->buildUrl('/v2/document/' . rawurlencode($documentId) . '/result'),
+            $this->buildClassicUrl('/v2/document/' . rawurlencode($documentId) . '/result', $authKey),
             'POST',
             [
                 'headers' => $this->buildHeaders($authKey),
@@ -245,8 +256,18 @@ final class DeeplApiClientService
 
     private function requestJson(string $authKey, string $method, string $path, array $payload = []): array
     {
+        return $this->requestJsonFromUrl($authKey, $method, $this->buildUrl($path), $payload);
+    }
+
+    private function requestClassicJson(string $authKey, string $method, string $path, array $payload = []): array
+    {
+        return $this->requestJsonFromUrl($authKey, $method, $this->buildClassicUrl($path, $authKey), $payload);
+    }
+
+    private function requestJsonFromUrl(string $authKey, string $method, string $url, array $payload = []): array
+    {
         $options = [
-            'headers' => $this->buildHeaders($authKey),
+            'headers' => $this->buildHeaders($authKey, $payload !== []),
             'http_errors' => false,
         ];
 
@@ -254,7 +275,7 @@ final class DeeplApiClientService
             $options['json'] = $payload;
         }
 
-        $response = $this->requestFactory->request($this->buildUrl($path), $method, $options);
+        $response = $this->requestFactory->request($url, $method, $options);
 
         return $this->decodeJsonResponse($response);
     }
@@ -302,6 +323,27 @@ final class DeeplApiClientService
     private function buildUrl(string $path): string
     {
         return $this->configurationService->getApiBaseUrl() . '/' . ltrim($path, '/');
+    }
+
+    private function buildClassicUrl(string $path, string $authKey): string
+    {
+        return $this->getClassicApiBaseUrl($authKey) . '/' . ltrim($path, '/');
+    }
+
+    private function getClassicApiBaseUrl(string $authKey): string
+    {
+        $configuredBaseUrl = $this->configurationService->getApiBaseUrl();
+        $configuredHost = strtolower((string)(parse_url($configuredBaseUrl, PHP_URL_HOST) ?: ''));
+
+        if ($configuredHost === 'api-free.deepl.com') {
+            return 'https://api-free.deepl.com';
+        }
+
+        if ($configuredHost === 'api.deepl.com') {
+            return 'https://api.deepl.com';
+        }
+
+        return str_ends_with(trim($authKey), ':fx') ? 'https://api-free.deepl.com' : 'https://api.deepl.com';
     }
 
     private function buildHeaders(string $authKey, bool $json = true): array

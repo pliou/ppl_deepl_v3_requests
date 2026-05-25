@@ -12,3 +12,15 @@ services:
 
   Ppl\PplDeeplV3Requests\Service\DeeplConfigurationService:
     public: true
+
+  Ppl\PplDeeplV3Requests\Service\DeeplLanguageConfigurationService:
+    public: true
+
+  Ppl\PplDeeplV3Requests\Service\DeeplGlossaryConfigurationService:
+    public: true
+
+  Ppl\PplDeeplV3Requests\Service\DeeplStyleRuleConfigurationService:
+    public: true
+
+  Ppl\PplDeeplV3Requests\Service\DeeplCustomInstructionConfigurationService:
+    public: true

@@ -20,6 +20,9 @@
     }
   },
   "extra": {
+    "branch-alias": {
+      "dev-main": "12.4.x-dev"
+    },
     "typo3/cms": {
       "extension-key": "ppl_deepl_v3_requests"
     }

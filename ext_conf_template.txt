@@ -1,5 +1,5 @@
 # cat=basic//; type=string; label=DeepL V3 Auth Key
 authKey =
 
-# cat=basic//; type=string; label=DeepL V3 API base URL: Use https://api.deepl.com for DeepL API Pro and https://api-free.deepl.com for DeepL API Free.
+# cat=basic//; type=string; label=DeepL V3 API base URL: Use https://api.deepl.com for DeepL API Pro or https://api-free.deepl.com for DeepL API Free. Enter only the host, no endpoint path.
 apiBaseUrl = https://api.deepl.com
