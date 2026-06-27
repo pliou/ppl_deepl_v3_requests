@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2026-05-31T00:00:00Z" product-name="ppl_deepl_v3_requests" target-language="pl">
+        <header />
+        <body>
+            <trans-unit id="extconf.authKey">
+                <source>DeepL V3 Auth Key</source>
+                <target>Klucz autoryzacyjny DeepL V3</target>
+            </trans-unit>
+            <trans-unit id="extconf.apiBaseUrl">
+                <source>DeepL V3 API base URL. Use https://api.deepl.com for DeepL API Pro or https://api-free.deepl.com for DeepL API Free. Enter only the host, no endpoint path.</source>
+                <target>Podstawowy adres URL API DeepL V3. Użyj https://api.deepl.com dla DeepL API Pro lub https://api-free.deepl.com dla DeepL API Free. Wprowadź tylko host, bez ścieżki punktu końcowego.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

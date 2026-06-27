@@ -1,0 +1,189 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+    <div class="ppl-deepl-v3">
+        <div class="ppl-deepl-v3__head">
+            <h1><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.title" /></h1>
+            <p><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.intro.v3" /></p>
+            <div class="ppl-deepl-v3__head-meta" aria-label="{f:translate(key: 'LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.statusLabel')}">
+                <span class="ppl-deepl-v3__chip ppl-deepl-v3__chip--info"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:status.product" /></span>
+                <f:if condition="{authKeyConfigured}">
+                    <f:then><span class="ppl-deepl-v3__chip ppl-deepl-v3__chip--success"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.apiReady" /></span></f:then>
+                    <f:else><span class="ppl-deepl-v3__chip ppl-deepl-v3__chip--warning"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.apiKeyMissing" /></span></f:else>
+                </f:if>
+            </div>
+        </div>
+
+        <f:for each="{messages}" as="message">
+            <div class="ppl-deepl-v3__{message.type}">{message.text}</div>
+        </f:for>
+
+        <f:if condition="{authKeyConfigured}">
+            <f:else>
+                <div class="ppl-deepl-v3__error"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:error.missingAuthKey.v3" /></div>
+            </f:else>
+        </f:if>
+
+        <div class="ppl-deepl-v3__tabs">
+            <f:if condition="{activeConfigTab} == 'glossaries'">
+                <f:then><a class="btn btn-primary ppl-deepl-v3__tab" href="{routeConfigurationGlossaries}" data-scroll-anchor="config-glossaries"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.glossaries" /></a></f:then>
+                <f:else><a class="btn btn-default ppl-deepl-v3__tab" href="{routeConfigurationGlossaries}" data-scroll-anchor="config-glossaries"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.glossaries" /></a></f:else>
+            </f:if>
+            <f:if condition="{apiCapabilities.supportsStyleRules}">
+                <f:if condition="{activeConfigTab} == 'style_rules'">
+                    <f:then><a class="btn btn-primary ppl-deepl-v3__tab" href="{routeConfigurationStyleRules}" data-scroll-anchor="config-style-rules"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.styleRules" /></a></f:then>
+                    <f:else><a class="btn btn-default ppl-deepl-v3__tab" href="{routeConfigurationStyleRules}" data-scroll-anchor="config-style-rules"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.styleRules" /></a></f:else>
+                </f:if>
+            </f:if>
+            <f:if condition="{activeConfigTab} == 'languages'">
+                <f:then><a class="btn btn-primary ppl-deepl-v3__tab" href="{routeConfigurationLanguages}" data-scroll-anchor="config-languages"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.languages" /></a></f:then>
+                <f:else><a class="btn btn-default ppl-deepl-v3__tab" href="{routeConfigurationLanguages}" data-scroll-anchor="config-languages"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.languages" /></a></f:else>
+            </f:if>
+        </div>
+
+        <f:if condition="{activeConfigTab} == 'languages'">
+            <f:then>
+                <div id="config-languages" class="ppl-deepl-v3__card" data-scroll-anchor="config-languages">
+                    <div class="ppl-deepl-v3__card-head">
+                        <strong><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.languages" /></strong>
+                        <span class="ppl-deepl-v3__muted"><f:count subject="{languages}" /> <f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.storedLocal" /></span>
+                    </div>
+                    <div class="ppl-deepl-v3__card-body">
+                        <form method="post" action="{routeConfiguration}" id="pplDeeplV3LanguageForm">
+                            <input type="hidden" name="config_tab" value="languages">
+                            <input type="hidden" name="form_token" value="{formToken}">
+                            <div class="ppl-deepl-v3__actions">
+                                <button class="btn btn-default" type="submit" name="module_action" value="fetch_languages" data-scroll-anchor="config-languages"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.fetchLanguages" /></button>
+                                <f:if condition="{languages}">
+                                    <button class="btn btn-primary" type="submit" name="module_action" value="{saveLanguageAction}" data-scroll-anchor="config-languages"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.saveApprovals" /></button>
+                                    <button class="btn btn-default" type="button" data-language-selection="all"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.selectAllLanguages" /></button>
+                                    <button class="btn btn-default" type="button" data-language-selection="none"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.deselectAllLanguages" /></button>
+                                </f:if>
+                            </div>
+
+                            <f:if condition="{languages}">
+                                <f:then>
+                                    <div class="ppl-deepl-v3__language-list ppl-deepl-v3__section">
+                                        <f:if condition="{enabledLanguages}">
+                                            <div class="ppl-deepl-v3__language-group">
+                                                <div class="ppl-deepl-v3__language-group-head">
+                                                    <strong><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.selectedLanguages" /></strong>
+                                                    <span class="ppl-deepl-v3__muted"><f:count subject="{enabledLanguages}" /></span>
+                                                </div>
+                                                <div class="ppl-deepl-v3__option-grid">
+                                                    <f:for each="{enabledLanguages}" as="language">
+                                                        <label class="ppl-deepl-v3__option">
+                                                            <input type="checkbox" name="enabled_languages[]" value="{language.code}" checked="checked">
+                                                            <span><strong>{language.name}</strong><br><span class="ppl-deepl-v3__muted">{language.code}</span></span>
+                                                        </label>
+                                                    </f:for>
+                                                </div>
+                                            </div>
+                                        </f:if>
+                                        <f:if condition="{disabledLanguages}">
+                                            <div class="ppl-deepl-v3__language-group">
+                                                <div class="ppl-deepl-v3__language-group-head">
+                                                    <strong><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.otherLanguages" /></strong>
+                                                    <span class="ppl-deepl-v3__muted"><f:count subject="{disabledLanguages}" /></span>
+                                                </div>
+                                                <div class="ppl-deepl-v3__option-grid">
+                                                    <f:for each="{disabledLanguages}" as="language">
+                                                        <label class="ppl-deepl-v3__option">
+                                                            <input type="checkbox" name="enabled_languages[]" value="{language.code}">
+                                                            <span><strong>{language.name}</strong><br><span class="ppl-deepl-v3__muted">{language.code}</span></span>
+                                                        </label>
+                                                    </f:for>
+                                                </div>
+                                            </div>
+                                        </f:if>
+                                    </div>
+                                </f:then>
+                                <f:else>
+                                    <div class="ppl-deepl-v3__notice ppl-deepl-v3__section"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.noLanguages" /></div>
+                                </f:else>
+                            </f:if>
+                        </form>
+                    </div>
+                </div>
+            </f:then>
+            <f:else>
+                <f:if condition="{activeConfigTab} == 'style_rules'">
+                    <f:then>
+                        <div id="config-style-rules" class="ppl-deepl-v3__card" data-scroll-anchor="config-style-rules">
+                            <div class="ppl-deepl-v3__card-head">
+                                <strong><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.styleRules" /></strong>
+                                <span class="ppl-deepl-v3__muted"><f:count subject="{styleRules}" /> <f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.storedLocal" /></span>
+                            </div>
+                            <div class="ppl-deepl-v3__card-body">
+                                <form method="post" action="{routeConfiguration}">
+                                    <input type="hidden" name="config_tab" value="style_rules">
+                                    <input type="hidden" name="form_token" value="{formToken}">
+                                    <div class="ppl-deepl-v3__actions">
+                                        <button class="btn btn-default" type="submit" name="module_action" value="fetch_style_rules" data-scroll-anchor="config-style-rules"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.fetchStyleRules" /></button>
+                                        <f:if condition="{styleRules}">
+                                            <button class="btn btn-primary" type="submit" name="module_action" value="{saveStyleRuleAction}" data-scroll-anchor="config-style-rules"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.saveApprovals" /></button>
+                                        </f:if>
+                                    </div>
+                                    <f:if condition="{styleRules}">
+                                        <f:then>
+                                            <div class="ppl-deepl-v3__option-grid ppl-deepl-v3__section">
+                                                <f:for each="{styleRules}" as="styleRule">
+                                                    <label class="ppl-deepl-v3__option">
+                                                        <f:if condition="{styleRule.enabled}">
+                                                            <f:then><input type="checkbox" name="enabled_style_rules[]" value="{styleRule.id}" checked="checked"></f:then>
+                                                            <f:else><input type="checkbox" name="enabled_style_rules[]" value="{styleRule.id}"></f:else>
+                                                        </f:if>
+                                                        <span><strong>{styleRule.name}</strong><br><span class="ppl-deepl-v3__muted">{styleRule.language} / Version {styleRule.version}</span></span>
+                                                    </label>
+                                                </f:for>
+                                            </div>
+                                        </f:then>
+                                        <f:else>
+                                            <div class="ppl-deepl-v3__notice ppl-deepl-v3__section"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.noStyleRules" /></div>
+                                        </f:else>
+                                    </f:if>
+                                </form>
+                            </div>
+                        </div>
+                    </f:then>
+                    <f:else>
+                        <div id="config-glossaries" class="ppl-deepl-v3__card" data-scroll-anchor="config-glossaries">
+                            <div class="ppl-deepl-v3__card-head">
+                                <strong><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.glossaries" /></strong>
+                                <span class="ppl-deepl-v3__muted"><f:count subject="{glossaries}" /> <f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.storedLocal" /></span>
+                            </div>
+                            <div class="ppl-deepl-v3__card-body">
+                                <form method="post" action="{routeConfiguration}">
+                                    <input type="hidden" name="config_tab" value="glossaries">
+                                    <input type="hidden" name="form_token" value="{formToken}">
+                                    <div class="ppl-deepl-v3__actions">
+                                        <button class="btn btn-default" type="submit" name="module_action" value="fetch_glossaries" data-scroll-anchor="config-glossaries"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.fetchGlossaries" /></button>
+                                        <f:if condition="{glossaries}">
+                                            <button class="btn btn-primary" type="submit" name="module_action" value="{saveGlossaryAction}" data-scroll-anchor="config-glossaries"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.saveApprovals" /></button>
+                                        </f:if>
+                                    </div>
+                                    <f:if condition="{glossaries}">
+                                        <f:then>
+                                            <div class="ppl-deepl-v3__option-grid ppl-deepl-v3__section">
+                                                <f:for each="{glossaries}" as="glossary">
+                                                    <label class="ppl-deepl-v3__option">
+                                                        <f:if condition="{glossary.enabled}">
+                                                            <f:then><input type="checkbox" name="enabled_glossaries[]" value="{glossary.id}" checked="checked"></f:then>
+                                                            <f:else><input type="checkbox" name="enabled_glossaries[]" value="{glossary.id}"></f:else>
+                                                        </f:if>
+                                                        <span><strong>{glossary.name}</strong><br><span class="ppl-deepl-v3__muted">{glossary.languagePairs} / {glossary.entryCount} <f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.entries" /></span></span>
+                                                    </label>
+                                                </f:for>
+                                            </div>
+                                        </f:then>
+                                        <f:else>
+                                            <div class="ppl-deepl-v3__notice ppl-deepl-v3__section"><f:translate key="LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:config.noGlossaries" /></div>
+                                        </f:else>
+                                    </f:if>
+                                </form>
+                            </div>
+                        </div>
+                    </f:else>
+                </f:if>
+            </f:else>
+        </f:if>
+    </div>
+</html>

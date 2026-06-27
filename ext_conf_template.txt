@@ -1,5 +1,5 @@
-# cat=basic//; type=string; label=DeepL V3 Auth Key
+# cat=basic//; type=string; label=LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:extconf.authKey
 authKey =
 
-# cat=basic//; type=string; label=DeepL V3 API base URL: Use https://api.deepl.com for DeepL API Pro and https://api-free.deepl.com for DeepL API Free.
+# cat=basic//; type=string; label=LLL:EXT:ppl_deepl_v3_requests/Resources/Private/Language/locallang.xlf:extconf.apiBaseUrl
 apiBaseUrl = https://api.deepl.com

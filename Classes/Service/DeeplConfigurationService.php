@@ -8,15 +8,29 @@ final class DeeplConfigurationService
 {
     private const EXTENSION_KEY = 'ppl_deepl_v3_requests';
     private const DEFAULT_API_BASE_URL = 'https://api.deepl.com';
+    private const ALLOWED_API_BASE_URLS = [
+        'api.deepl.com' => 'https://api.deepl.com',
+        'api-free.deepl.com' => 'https://api-free.deepl.com',
+        'api-us.deepl.com' => 'https://api-us.deepl.com',
+        'api-jp.deepl.com' => 'https://api-jp.deepl.com',
+    ];
 
     public function getAuthKey(array $settings = []): string
     {
-        $extensionConfiguration = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][self::EXTENSION_KEY] ?? [];
-        if (is_array($extensionConfiguration)) {
-            return trim((string)($extensionConfiguration['authKey'] ?? ''));
+        $settingsAuthKey = trim((string)($settings['authKey'] ?? ''));
+        if ($settingsAuthKey !== '') {
+            return $settingsAuthKey;
         }
 
-        return '';
+        $extensionConfiguration = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][self::EXTENSION_KEY] ?? [];
+        if (is_array($extensionConfiguration)) {
+            $configuredAuthKey = trim((string)($extensionConfiguration['authKey'] ?? ''));
+            if ($configuredAuthKey !== '') {
+                return $configuredAuthKey;
+            }
+        }
+
+        return trim((string)(getenv('DEEPL_AUTH_KEY') ?: ''));
     }
 
     public function getApiBaseUrl(array $settings = []): string
@@ -42,24 +56,40 @@ final class DeeplConfigurationService
         return self::DEFAULT_API_BASE_URL;
     }
 
-    public function getLoginPageUid(array $settings = []): int
-    {
-        if (isset($settings['loginPageUid']) && (int)$settings['loginPageUid'] > 0) {
-            return (int)$settings['loginPageUid'];
-        }
-
-        $extensionConfiguration = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'][self::EXTENSION_KEY] ?? [];
-        if (is_array($extensionConfiguration) && (int)($extensionConfiguration['loginPageUid'] ?? 0) > 0) {
-            return (int)$extensionConfiguration['loginPageUid'];
-        }
-
-        return 95;
-    }
-
     private function normalizeApiBaseUrl(string $apiBaseUrl): string
     {
-        $apiBaseUrl = rtrim($apiBaseUrl, '/');
+        $apiBaseUrl = rtrim(trim($apiBaseUrl), '/');
+        if ($apiBaseUrl === '') {
+            return self::DEFAULT_API_BASE_URL;
+        }
 
-        return $apiBaseUrl !== '' ? $apiBaseUrl : self::DEFAULT_API_BASE_URL;
+        $parts = parse_url($apiBaseUrl);
+        if (!is_array($parts)) {
+            throw new \InvalidArgumentException('DeepL API base URL is invalid.');
+        }
+
+        $scheme = strtolower((string)($parts['scheme'] ?? ''));
+        $host = strtolower((string)($parts['host'] ?? ''));
+        if ($scheme !== 'https' || $host === '') {
+            throw new \InvalidArgumentException('DeepL API base URL must use HTTPS.');
+        }
+
+        $path = trim((string)($parts['path'] ?? ''), '/');
+        if (
+            $path !== ''
+            || isset($parts['user'])
+            || isset($parts['pass'])
+            || isset($parts['port'])
+            || isset($parts['query'])
+            || isset($parts['fragment'])
+        ) {
+            throw new \InvalidArgumentException('DeepL API base URL must only contain scheme and host.');
+        }
+
+        if (!isset(self::ALLOWED_API_BASE_URLS[$host])) {
+            throw new \InvalidArgumentException('DeepL API base URL must be https://api.deepl.com, https://api-free.deepl.com, https://api-us.deepl.com or https://api-jp.deepl.com.');
+        }
+
+        return self::ALLOWED_API_BASE_URLS[$host];
     }
 }

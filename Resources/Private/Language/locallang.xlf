@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2026-05-31T00:00:00Z" product-name="ppl_deepl_v3_requests">
+        <header/>
+        <body>
+            <trans-unit id="extconf.authKey"><source>DeepL V3 Auth Key</source></trans-unit>
+            <trans-unit id="extconf.apiBaseUrl"><source>DeepL V3 API base URL. Use https://api.deepl.com for DeepL API Pro or https://api-free.deepl.com for DeepL API Free. Enter only the host, no endpoint path.</source></trans-unit>
+            <trans-unit id="module.root.title"><source>PPL DeepL V3</source></trans-unit>
+            <trans-unit id="module.root.description"><source>Shared DeepL V3 API access and translation tools.</source></trans-unit>
+            <trans-unit id="module.configuration.title"><source>Configuration</source></trans-unit>
+            <trans-unit id="module.configuration.description.v3"><source>Manage DeepL languages, glossaries and style rules.</source></trans-unit>
+            <trans-unit id="status.product"><source>DeepL v3</source></trans-unit>
+            <trans-unit id="error.missingAuthKey.v3"><source>No DeepL auth key is configured.</source></trans-unit>
+            <trans-unit id="config.title"><source>PPL DeepL V3 Configuration</source></trans-unit>
+            <trans-unit id="config.intro.v3"><source>Fetch languages, glossaries and style rules, store them locally and approve them for selection.</source></trans-unit>
+            <trans-unit id="config.statusLabel"><source>DeepL v3 configuration status</source></trans-unit>
+            <trans-unit id="config.apiReady"><source>API ready</source></trans-unit>
+            <trans-unit id="config.apiKeyMissing"><source>API key missing</source></trans-unit>
+            <trans-unit id="config.storedLocal"><source>stored locally</source></trans-unit>
+            <trans-unit id="config.languages"><source>Languages</source></trans-unit>
+            <trans-unit id="config.selectedLanguages"><source>Selected languages</source></trans-unit>
+            <trans-unit id="config.otherLanguages"><source>Other languages</source></trans-unit>
+            <trans-unit id="config.glossaries"><source>Glossaries</source></trans-unit>
+            <trans-unit id="config.styleRules"><source>Style rules</source></trans-unit>
+            <trans-unit id="config.fetchLanguages"><source>Fetch languages from DeepL</source></trans-unit>
+            <trans-unit id="config.fetchGlossaries"><source>Fetch glossaries from DeepL</source></trans-unit>
+            <trans-unit id="config.fetchStyleRules"><source>Fetch style rules from DeepL</source></trans-unit>
+            <trans-unit id="config.saveApprovals"><source>Save approvals</source></trans-unit>
+            <trans-unit id="config.selectAllLanguages"><source>Select all languages</source></trans-unit>
+            <trans-unit id="config.deselectAllLanguages"><source>Deselect all languages</source></trans-unit>
+            <trans-unit id="config.noLanguages"><source>No languages stored yet. The predefined DeepL list is used.</source></trans-unit>
+            <trans-unit id="config.noGlossaries"><source>No glossaries stored yet. Please fetch them from DeepL first.</source></trans-unit>
+            <trans-unit id="config.noStyleRules"><source>No style rules stored yet. Please fetch them from DeepL first.</source></trans-unit>
+            <trans-unit id="config.entries"><source>entries</source></trans-unit>
+            <trans-unit id="message.invalidFormToken"><source>The form token is invalid. Please reload the module and try again.</source></trans-unit>
+            <trans-unit id="message.languagesSaved"><source>%d language(s) saved.</source></trans-unit>
+            <trans-unit id="message.languagesFound"><source>%d language(s) found at DeepL.</source></trans-unit>
+            <trans-unit id="message.languagesFetchFailed"><source>Languages could not be fetched: %s</source></trans-unit>
+            <trans-unit id="message.languagesApproved"><source>%d language(s) approved.</source></trans-unit>
+            <trans-unit id="message.glossariesSaved"><source>%d glossary/glossaries saved, %d approved.</source></trans-unit>
+            <trans-unit id="message.glossariesFound"><source>%d glossary/glossaries found at DeepL.</source></trans-unit>
+            <trans-unit id="message.glossariesFetchFailed"><source>Glossaries could not be fetched: %s</source></trans-unit>
+            <trans-unit id="message.glossariesApproved"><source>%d glossary/glossaries approved.</source></trans-unit>
+            <trans-unit id="message.styleRulesSaved"><source>%d style rule(s) saved, %d approved.</source></trans-unit>
+            <trans-unit id="message.styleRulesFound"><source>%d style rule(s) found at DeepL.</source></trans-unit>
+            <trans-unit id="message.styleRulesFetchFailed"><source>Style rules could not be fetched: %s</source></trans-unit>
+            <trans-unit id="message.styleRulesApproved"><source>%d style rule(s) approved.</source></trans-unit>
+        </body>
+    </file>
+</xliff>
