@@ -58,6 +58,7 @@ final class DeeplLanguageConfigurationService
     ];
 
     private ?DeeplApiClientService $apiClient;
+    private ?AtomicJsonConfigurationStore $configurationStore = null;
 
     public function __construct(?DeeplApiClientService $apiClient = null)
     {
@@ -92,8 +93,8 @@ final class DeeplLanguageConfigurationService
             return $this->getFallbackLanguages();
         }
 
-        $data = json_decode((string)file_get_contents($storageFile), true);
-        if (!is_array($data) || !is_array($data['languages'] ?? null)) {
+        $data = $this->getConfigurationStore()->readJsonFile($storageFile);
+        if ($data === null || !is_array($data['languages'] ?? null)) {
             return $this->getFallbackLanguages();
         }
 
@@ -148,21 +149,13 @@ final class DeeplLanguageConfigurationService
             ];
         }
 
-        $storageDirectory = dirname($this->getStorageFilePath());
-        if (!is_dir($storageDirectory)) {
-            GeneralUtility::mkdir_deep($storageDirectory);
-        }
-
-        file_put_contents(
+        $this->getConfigurationStore()->writeJsonFile(
             $this->getStorageFilePath(),
-            json_encode(
-                [
-                    'savedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
-                    'manualSelection' => true,
-                    'languages' => array_values($languages),
-                ],
-                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-            )
+            [
+                'savedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
+                'manualSelection' => true,
+                'languages' => array_values($languages),
+            ]
         );
 
         return $this->sortLanguages(array_values($languages), false);
@@ -637,7 +630,7 @@ final class DeeplLanguageConfigurationService
                 GeneralUtility::mkdir_deep($storageDirectory);
             }
 
-            copy($legacyStorageFile, $storageFile);
+            $this->getConfigurationStore()->copyJsonFile($legacyStorageFile, $storageFile);
             return;
         }
     }
@@ -754,5 +747,14 @@ final class DeeplLanguageConfigurationService
         }
 
         return $this->apiClient;
+    }
+
+    private function getConfigurationStore(): AtomicJsonConfigurationStore
+    {
+        if ($this->configurationStore === null) {
+            $this->configurationStore = GeneralUtility::makeInstance(AtomicJsonConfigurationStore::class);
+        }
+
+        return $this->configurationStore;
     }
 }

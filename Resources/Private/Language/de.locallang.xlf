@@ -11,6 +11,52 @@
                 <source>DeepL V3 API base URL. Use https://api.deepl.com for DeepL API Pro or https://api-free.deepl.com for DeepL API Free. Enter only the host, no endpoint path.</source>
                 <target>DeepL V3 API-Basis-URL. Verwenden Sie https://api.deepl.com für DeepL API Pro oder https://api-free.deepl.com für DeepL API Free. Geben Sie nur den Host ein, keinen Endpunkt-Pfad.</target>
             </trans-unit>
+            <trans-unit id="module.root.title">
+                <source>PPL DeepL V3</source>
+                <target>PPL DeepL V3</target>
+            </trans-unit>
+            <trans-unit id="module.root.description">
+                <source>Shared DeepL V3 API access and translation tools.</source>
+                <target>Gemeinsamer DeepL V3 API-Zugriff und Uebersetzungswerkzeuge.</target>
+            </trans-unit>
+            <trans-unit id="module.configuration.title"><source>Configuration</source><target>Konfiguration</target></trans-unit>
+            <trans-unit id="module.configuration.description.v3"><source>Manage DeepL languages, glossaries and style rules.</source><target>DeepL-Sprachen, Glossare und Stilregeln verwalten.</target></trans-unit>
+            <trans-unit id="status.product"><source>DeepL v3</source><target>DeepL v3</target></trans-unit>
+            <trans-unit id="error.missingAuthKey.v3"><source>No DeepL auth key is configured.</source><target>Es wurde kein DeepL Auth-Key konfiguriert.</target></trans-unit>
+            <trans-unit id="config.title"><source>PPL DeepL V3 Configuration</source><target>PPL DeepL V3 Konfiguration</target></trans-unit>
+            <trans-unit id="config.intro.v3"><source>Fetch languages, glossaries and style rules, store them locally and approve them for selection.</source><target>Sprachen, Glossare und Stilregeln abrufen, lokal speichern und fuer die Auswahl freigeben.</target></trans-unit>
+            <trans-unit id="config.statusLabel"><source>DeepL v3 configuration status</source><target>DeepL v3 Konfigurationsstatus</target></trans-unit>
+            <trans-unit id="config.apiReady"><source>API ready</source><target>API bereit</target></trans-unit>
+            <trans-unit id="config.apiKeyMissing"><source>API key missing</source><target>API-Key fehlt</target></trans-unit>
+            <trans-unit id="config.storedLocal"><source>stored locally</source><target>lokal gespeichert</target></trans-unit>
+            <trans-unit id="config.languages"><source>Languages</source><target>Sprachen</target></trans-unit>
+            <trans-unit id="config.selectedLanguages"><source>Selected languages</source><target>Ausgewaehlte Sprachen</target></trans-unit>
+            <trans-unit id="config.otherLanguages"><source>Other languages</source><target>Weitere Sprachen</target></trans-unit>
+            <trans-unit id="config.glossaries"><source>Glossaries</source><target>Glossare</target></trans-unit>
+            <trans-unit id="config.styleRules"><source>Style rules</source><target>Stilregeln</target></trans-unit>
+            <trans-unit id="config.fetchLanguages"><source>Fetch languages from DeepL</source><target>Sprachen bei DeepL abfragen</target></trans-unit>
+            <trans-unit id="config.fetchGlossaries"><source>Fetch glossaries from DeepL</source><target>Glossare bei DeepL abfragen</target></trans-unit>
+            <trans-unit id="config.fetchStyleRules"><source>Fetch style rules from DeepL</source><target>Stilregeln bei DeepL abfragen</target></trans-unit>
+            <trans-unit id="config.saveApprovals"><source>Save approvals</source><target>Freigaben speichern</target></trans-unit>
+            <trans-unit id="config.selectAllLanguages"><source>Select all languages</source><target>Alle Sprachen auswaehlen</target></trans-unit>
+            <trans-unit id="config.deselectAllLanguages"><source>Deselect all languages</source><target>Alle Sprachen abwaehlen</target></trans-unit>
+            <trans-unit id="config.noLanguages"><source>No languages stored yet. The predefined DeepL list is used.</source><target>Noch keine Sprachen gespeichert. Es wird die vordefinierte DeepL-Liste verwendet.</target></trans-unit>
+            <trans-unit id="config.noGlossaries"><source>No glossaries stored yet. Please fetch them from DeepL first.</source><target>Noch keine Glossare gespeichert. Bitte zuerst bei DeepL abfragen.</target></trans-unit>
+            <trans-unit id="config.noStyleRules"><source>No style rules stored yet. Please fetch them from DeepL first.</source><target>Noch keine Stilregeln gespeichert. Bitte zuerst bei DeepL abfragen.</target></trans-unit>
+            <trans-unit id="config.entries"><source>entries</source><target>Eintraege</target></trans-unit>
+            <trans-unit id="message.invalidFormToken"><source>The form token is invalid. Please reload the module and try again.</source><target>Das Formular-Token ist ungueltig. Bitte laden Sie das Modul neu und versuchen Sie es erneut.</target></trans-unit>
+            <trans-unit id="message.languagesSaved"><source>%d language(s) saved.</source><target>%d Sprache(n) gespeichert.</target></trans-unit>
+            <trans-unit id="message.languagesFound"><source>%d language(s) found at DeepL.</source><target>%d Sprache(n) bei DeepL gefunden.</target></trans-unit>
+            <trans-unit id="message.languagesFetchFailed"><source>Languages could not be fetched: %s</source><target>Sprachen konnten nicht abgefragt werden: %s</target></trans-unit>
+            <trans-unit id="message.languagesApproved"><source>%d language(s) approved.</source><target>%d Sprache(n) freigegeben.</target></trans-unit>
+            <trans-unit id="message.glossariesSaved"><source>%d glossary/glossaries saved, %d approved.</source><target>%d Glossar(e) gespeichert, %d freigegeben.</target></trans-unit>
+            <trans-unit id="message.glossariesFound"><source>%d glossary/glossaries found at DeepL.</source><target>%d Glossar(e) bei DeepL gefunden.</target></trans-unit>
+            <trans-unit id="message.glossariesFetchFailed"><source>Glossaries could not be fetched: %s</source><target>Glossare konnten nicht abgefragt werden: %s</target></trans-unit>
+            <trans-unit id="message.glossariesApproved"><source>%d glossary/glossaries approved.</source><target>%d Glossar(e) freigegeben.</target></trans-unit>
+            <trans-unit id="message.styleRulesSaved"><source>%d style rule(s) saved, %d approved.</source><target>%d Stilregel(n) gespeichert, %d freigegeben.</target></trans-unit>
+            <trans-unit id="message.styleRulesFound"><source>%d style rule(s) found at DeepL.</source><target>%d Stilregel(n) bei DeepL gefunden.</target></trans-unit>
+            <trans-unit id="message.styleRulesFetchFailed"><source>Style rules could not be fetched: %s</source><target>Stilregeln konnten nicht abgefragt werden: %s</target></trans-unit>
+            <trans-unit id="message.styleRulesApproved"><source>%d style rule(s) approved.</source><target>%d Stilregel(n) freigegeben.</target></trans-unit>
         </body>
     </file>
 </xliff>

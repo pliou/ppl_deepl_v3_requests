@@ -13,6 +13,8 @@ final class DeeplCustomInstructionConfigurationService
     private const LEGACY_STORAGE_DIRECTORY = 'ppl_deepl_v3_translate';
     private const STORAGE_FILE = 'custom-instructions.json';
 
+    private ?AtomicJsonConfigurationStore $configurationStore = null;
+
     public function getSavedCustomInstructions(): array
     {
         $this->migrateLegacyStorageFileIfNeeded();
@@ -21,8 +23,8 @@ final class DeeplCustomInstructionConfigurationService
             return [];
         }
 
-        $data = json_decode((string)file_get_contents($storageFile), true);
-        if (!is_array($data) || !is_array($data['customInstructions'] ?? null)) {
+        $data = $this->getConfigurationStore()->readJsonFile($storageFile);
+        if ($data === null || !is_array($data['customInstructions'] ?? null)) {
             return [];
         }
 
@@ -41,20 +43,12 @@ final class DeeplCustomInstructionConfigurationService
             ];
         }
 
-        $storageDirectory = dirname($this->getStorageFilePath());
-        if (!is_dir($storageDirectory)) {
-            GeneralUtility::mkdir_deep($storageDirectory);
-        }
-
-        file_put_contents(
+        $this->getConfigurationStore()->writeJsonFile(
             $this->getStorageFilePath(),
-            json_encode(
-                [
-                    'savedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
-                    'customInstructions' => $records,
-                ],
-                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-            )
+            [
+                'savedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
+                'customInstructions' => $records,
+            ]
         );
 
         return $records;
@@ -76,9 +70,9 @@ final class DeeplCustomInstructionConfigurationService
 
         $normalized = [];
         foreach ($instructions as $instruction) {
-            $instruction = trim((string)$instruction);
+            $instruction = $this->normalizeCustomInstructionText((string)$instruction);
             if ($instruction !== '') {
-                $normalized[] = substr($instruction, 0, 300);
+                $normalized[] = $instruction;
             }
         }
 
@@ -91,14 +85,15 @@ final class DeeplCustomInstructionConfigurationService
 
         foreach ($instructions as $instruction) {
             if (is_string($instruction)) {
-                $text = trim($instruction);
-                if ($text !== '') {
-                    $records[] = [
-                        'id' => sha1($text),
-                        'text' => substr($text, 0, 300),
-                        'enabled' => true,
-                    ];
+                $text = $this->normalizeStoredInstructionText($instruction);
+                if ($text === null) {
+                    continue;
                 }
+                $records[] = [
+                    'id' => sha1($text),
+                    'text' => $text,
+                    'enabled' => true,
+                ];
                 continue;
             }
 
@@ -106,14 +101,14 @@ final class DeeplCustomInstructionConfigurationService
                 continue;
             }
 
-            $text = trim((string)($instruction['text'] ?? ''));
-            if ($text === '') {
+            $text = $this->normalizeStoredInstructionText((string)($instruction['text'] ?? ''));
+            if ($text === null) {
                 continue;
             }
 
             $records[] = [
                 'id' => (string)($instruction['id'] ?? sha1($text)),
-                'text' => substr($text, 0, 300),
+                'text' => $text,
                 'enabled' => array_key_exists('enabled', $instruction) ? (bool)$instruction['enabled'] : true,
             ];
         }
@@ -143,11 +138,56 @@ final class DeeplCustomInstructionConfigurationService
             return;
         }
 
-        $storageDirectory = dirname($storageFile);
-        if (!is_dir($storageDirectory)) {
-            GeneralUtility::mkdir_deep($storageDirectory);
+        $this->getConfigurationStore()->copyJsonFile($legacyStorageFile, $storageFile);
+    }
+
+    private function normalizeCustomInstructionText(string $instruction): string
+    {
+        $instruction = trim($instruction);
+        if ($instruction === '') {
+            return '';
         }
 
-        copy($legacyStorageFile, $storageFile);
+        if (!$this->isValidUtf8($instruction)) {
+            throw new \InvalidArgumentException('Custom instructions must be valid UTF-8.', 1781869310);
+        }
+
+        return $this->truncateUtf8($instruction, 300);
+    }
+
+    private function normalizeStoredInstructionText(string $instruction): ?string
+    {
+        try {
+            $instruction = $this->normalizeCustomInstructionText($instruction);
+        } catch (\InvalidArgumentException) {
+            return null;
+        }
+
+        return $instruction !== '' ? $instruction : null;
+    }
+
+    private function truncateUtf8(string $value, int $length): string
+    {
+        if (function_exists('mb_substr')) {
+            return mb_substr($value, 0, $length, 'UTF-8');
+        }
+
+        preg_match_all('/./us', $value, $characters);
+
+        return implode('', array_slice($characters[0] ?? [], 0, $length));
+    }
+
+    private function isValidUtf8(string $value): bool
+    {
+        return preg_match('//u', $value) === 1;
+    }
+
+    private function getConfigurationStore(): AtomicJsonConfigurationStore
+    {
+        if ($this->configurationStore === null) {
+            $this->configurationStore = GeneralUtility::makeInstance(AtomicJsonConfigurationStore::class);
+        }
+
+        return $this->configurationStore;
     }
 }

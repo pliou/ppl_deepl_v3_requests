@@ -15,6 +15,7 @@ final class DeeplStyleRuleConfigurationService
 
     private ?DeeplLanguageConfigurationService $languageService;
     private ?DeeplApiClientService $apiClient;
+    private ?AtomicJsonConfigurationStore $configurationStore = null;
 
     public function __construct(
         ?DeeplLanguageConfigurationService $languageService = null,
@@ -72,8 +73,8 @@ final class DeeplStyleRuleConfigurationService
             return [];
         }
 
-        $data = json_decode((string)file_get_contents($storageFile), true);
-        if (!is_array($data)) {
+        $data = $this->getConfigurationStore()->readJsonFile($storageFile);
+        if ($data === null) {
             return [];
         }
 
@@ -113,20 +114,12 @@ final class DeeplStyleRuleConfigurationService
             $savedStyleRules[] = $styleRule;
         }
 
-        $storageDirectory = dirname($this->getStorageFilePath());
-        if (!is_dir($storageDirectory)) {
-            GeneralUtility::mkdir_deep($storageDirectory);
-        }
-
-        file_put_contents(
+        $this->getConfigurationStore()->writeJsonFile(
             $this->getStorageFilePath(),
-            json_encode(
-                [
-                    'savedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
-                    'styleRules' => $savedStyleRules,
-                ],
-                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-            )
+            [
+                'savedAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
+                'styleRules' => $savedStyleRules,
+            ]
         );
 
         return $savedStyleRules;
@@ -263,12 +256,7 @@ final class DeeplStyleRuleConfigurationService
             return;
         }
 
-        $storageDirectory = dirname($storageFile);
-        if (!is_dir($storageDirectory)) {
-            GeneralUtility::mkdir_deep($storageDirectory);
-        }
-
-        copy($legacyStorageFile, $storageFile);
+        $this->getConfigurationStore()->copyJsonFile($legacyStorageFile, $storageFile);
     }
 
     private function getLanguageService(): DeeplLanguageConfigurationService
@@ -287,5 +275,14 @@ final class DeeplStyleRuleConfigurationService
         }
 
         return $this->apiClient;
+    }
+
+    private function getConfigurationStore(): AtomicJsonConfigurationStore
+    {
+        if ($this->configurationStore === null) {
+            $this->configurationStore = GeneralUtility::makeInstance(AtomicJsonConfigurationStore::class);
+        }
+
+        return $this->configurationStore;
     }
 }
