@@ -1,6 +1,6 @@
 # PPL DeepL V3 Requests
 
-Shared TYPO3 12.4 service package for direct DeepL REST requests.
+Shared TYPO3 14 service package for direct DeepL REST requests.
 
 This package owns the HTTP request layer for PPL DeepL V3 extensions and intentionally does not depend on `deeplcom/deepl-php`.
 
@@ -18,14 +18,14 @@ This package owns the HTTP request layer for PPL DeepL V3 extensions and intenti
 
 ## Requirements
 
-- TYPO3 CMS 12.4 LTS
+- TYPO3 CMS 14
 - PHP 8.2 or newer
 - A DeepL API key
 
 ## Installation
 
 ```bash
-composer require ppl/ppl-deepl-v3-requests:^12.4
+composer require ppl/ppl-deepl-v3-requests:^14.0
 ```
 
 This package is usually installed together with a consuming extension such as `ppl/ppl-deepl-v3-translate`.
@@ -75,7 +75,7 @@ The package does not register frontend plugins or backend modules by itself. It 
 
 ## Release
 
-Version `12.4.x` is the TYPO3 12.4 release line.
+Version `14.x` is the TYPO3 14 release line.
 
 ## License
 
